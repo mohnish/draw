@@ -2,6 +2,7 @@
 ;(function(window) {
   function Painter(el) {
     if (!(this instanceof Painter)) return new Painter(el);
+    if (!el) throw new Error('A HTML Canvas element is required to operate on');
     this.el = el;
     this.ctx = el.getContext('2d');
     this.inProgress = false;
@@ -16,21 +17,19 @@
     return this;
   };
 
-  Painter.prototype.save = function() {
-    this.ctx.save();
+  Painter.prototype.start = function(e) {
+    this.inProgress = true;
+    this.ctx.beginPath();
+    this.ctx.moveTo(e.x, e.y);
     return this;
   };
 
-  Painter.prototype.restore = function() {
-    this.ctx.restore();
-    return this;
-  };
-
-  Painter.prototype.paint = function() {
+  Painter.prototype.paint = function(e) {
     if (this.inProgress) {
-      this.ctx.lineTo(x, y);
+      this.ctx.lineTo(e.x, e.y);
       this.ctx.stroke();
     }
+
     return this;
   };
 
@@ -40,10 +39,13 @@
     return this;
   };
 
-  Painter.prototype.start = function() {
-    this.inProgress = true;
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
+  Painter.prototype.save = function() {
+    this.ctx.save();
+    return this;
+  };
+
+  Painter.prototype.restore = function() {
+    this.ctx.restore();
     return this;
   };
 
