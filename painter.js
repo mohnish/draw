@@ -49,5 +49,13 @@
     return this;
   };
 
+  // TODO make this work
+  Painter.prototype.finish = function() {
+    this.eventManager.unbind('mousedown', this.start);
+    this.eventManager.unbind('mousemove', this.paint);
+    this.eventManager.unbind('mouseup', this.stop);
+    return this;
+  };
+
   window.Painter = Painter;
 })(window);
