@@ -26,11 +26,8 @@
   EventManager.prototype.bind = function(evt, fn) {
     var obj = this.obj
       , el = this.el;
-      // , args = [].slice.call(arguments, 2);
 
     function cb(e) {
-      // var listOfArgs = [e].concat(args);
-      // fn.apply(obj, listOfArgs);
       fn.call(obj, e);
     }
 
@@ -43,8 +40,6 @@
       , el = this.el;
 
     function cb(e) {
-      // var listOfArgs = [e].concat(args);
-      // fn.apply(obj, listOfArgs);
       fn.call(obj, e);
     }
 
