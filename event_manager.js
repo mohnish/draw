@@ -21,6 +21,7 @@
     if (!obj) throw new Error('Object missing');
     this.el = el;
     this.obj = obj;
+    this.eventSubscriptionList = {};
   }
 
   EventManager.prototype.bind = function(evt, fn) {
@@ -31,17 +32,17 @@
       fn.call(obj, e);
     }
 
+    this.eventSubscriptionList[evt] = cb;
+
     bind(el, evt, cb);
     return cb;
   };
 
-  EventManager.prototype.unbind = function(evt, fn) {
+  // TODO this needs to be able to accept method names and not just callbacks
+  EventManager.prototype.unbind = function(evt) {
     var obj = this.obj
-      , el = this.el;
-
-    function cb(e) {
-      fn.call(obj, e);
-    }
+      , el = this.el
+      , cb = this.eventSubscriptionList[evt];
 
     unbind(el, evt, cb);
     return cb;
