@@ -17,7 +17,7 @@
   function EventManager(el, obj) {
     if (!(this instanceof EventManager)) return new EventManager(el, obj);
     if (!el) throw new Error('Element missing');
-    // TODO make this optional so that it can be used for regular event binding
+    // TODO make this optional (for regular event binding)
     if (!obj) throw new Error('Object missing');
     this.el = el;
     this.obj = obj;
@@ -25,12 +25,13 @@
 
   EventManager.prototype.bind = function(evt, fn) {
     var obj = this.obj
-      , el = this.el
-      , args = [].slice.call(arguments, 2);
+      , el = this.el;
+      // , args = [].slice.call(arguments, 2);
 
     function cb(e) {
-      var listOfArgs = [e].concat(args);
-      fn.apply(obj, listOfArgs);
+      // var listOfArgs = [e].concat(args);
+      // fn.apply(obj, listOfArgs);
+      fn.call(obj, e);
     }
 
     bind(el, evt, cb);
@@ -38,8 +39,17 @@
   };
 
   EventManager.prototype.unbind = function(evt, fn) {
-    unbind(this.el, evt, fn);
-    return fn;
+    var obj = this.obj
+      , el = this.el;
+
+    function cb(e) {
+      // var listOfArgs = [e].concat(args);
+      // fn.apply(obj, listOfArgs);
+      fn.call(obj, e);
+    }
+
+    unbind(el, evt, cb);
+    return cb;
   };
 
   window.EventManager = EventManager;
