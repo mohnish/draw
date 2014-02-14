@@ -11,6 +11,9 @@
   }
 
   Painter.prototype.attachEvents = function() {
+    this.eventManager.bind('touchstart', this.start);
+    this.eventManager.bind('touchmove', this.paint);
+    this.eventManager.bind('touchend', this.stop);
     this.eventManager.bind('mousedown', this.start);
     this.eventManager.bind('mousemove', this.paint);
     this.eventManager.bind('mouseup', this.stop);
@@ -18,15 +21,24 @@
   };
 
   Painter.prototype.start = function(e) {
+    e.preventDefault();
+    var x = e.x || e.touches[0].pageX
+      , y = e.y || e.touches[0].pageY;
+
+    this.ctx.strokeStyle = "rgb(200,0,0)";
     this.inProgress = true;
     this.ctx.beginPath();
-    this.ctx.moveTo(e.x, e.y);
+    this.ctx.moveTo(x, y);
     return this;
   };
 
   Painter.prototype.paint = function(e) {
+    e.preventDefault();
+    var x = e.x || e.touches[0].pageX
+      , y = e.y || e.touches[0].pageY;
+
     if (this.inProgress) {
-      this.ctx.lineTo(e.x, e.y);
+      this.ctx.lineTo(x, y);
       this.ctx.stroke();
     }
 
@@ -49,11 +61,13 @@
     return this;
   };
 
-  // TODO make this work
   Painter.prototype.finish = function() {
     this.eventManager.unbind('mousedown', this.start);
     this.eventManager.unbind('mousemove', this.paint);
     this.eventManager.unbind('mouseup', this.stop);
+    this.eventManager.unbind('touchstart', this.start);
+    this.eventManager.unbind('touchmove', this.paint);
+    this.eventManager.unbind('touchend', this.stop);
     return this;
   };
 
