@@ -2,15 +2,15 @@
 ;(function(){
   var binder = window.addEventListener ? 'addEventListener' : 'attachEvent'
     , unbinder = window.removeEventListener ? 'removeEventListener' : 'detachEvent'
-    , prefix = binder !== 'addEventListener' ? 'on' : '';
+    , eventPrefix = binder !== 'addEventListener' ? 'on' : '';
 
   function bind(el, type, fn, capture) {
-    el[binder](prefix + type, fn, capture || false);
+    el[binder](eventPrefix + type, fn, capture || false);
     return fn;
   }
 
   function unbind(el, type, fn, capture) {
-    el[unbinder](prefix + type, fn, capture || false);
+    el[unbinder](eventPrefix + type, fn, capture || false);
     return fn;
   }
 
