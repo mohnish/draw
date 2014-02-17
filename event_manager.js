@@ -26,10 +26,12 @@
 
   EventManager.prototype.bind = function(evt, fn) {
     var obj = this.obj
-      , el = this.el;
+      , el = this.el
+      , args = [].slice.call(arguments, 2);
 
     function cb(e) {
-      fn.call(obj, e);
+      var a = [].slice.call(arguments).concat(args);
+      fn.apply(obj, a);
     }
 
     this.eventSubscriptionList[evt] = cb;
@@ -45,7 +47,6 @@
       , cb = this.eventSubscriptionList[evt];
 
     unbind(el, evt, cb);
-    return cb;
   };
 
   window.EventManager = EventManager;
